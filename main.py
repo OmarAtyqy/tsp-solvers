@@ -1,4 +1,4 @@
-from src.solver.grasp import GRASP
+from src.solvers.grasp import GRASP
 import numpy as np
 
 
