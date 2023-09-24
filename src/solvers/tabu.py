@@ -17,11 +17,11 @@ class Tabu:
         self.distance_function = distance_function
 
         # initialize the solution and cost and the distance matrix
-        self.distance_matrix = self.calculate_distance_matrix()
+        self.distance_matrix = self._calculate_distance_matrix()
         self.best_solution = None
         self.best_cost = float('inf')
 
-    def calculate_distance_matrix(self):
+    def _calculate_distance_matrix(self):
         n = len(self.coordinates)
         distance_matrix = np.zeros((n, n))
         for i in range(n):
@@ -30,14 +30,14 @@ class Tabu:
                     self.coordinates[i], self.coordinates[j])
         return distance_matrix
 
-    def calculate_total_distance(self, tour):
+    def _calculate_total_distance(self, tour):
         total_distance = 0
         n = len(tour)
         for i in range(n):
             total_distance += self.distance_matrix[tour[i - 1], tour[i]]
         return total_distance
 
-    def generate_neighbors(self, solution):
+    def _generate_neighbors(self, solution):
         neighbors = []
         n = len(solution)
         for i in range(n):
@@ -53,20 +53,20 @@ class Tabu:
         # Initialize current and best solutions
         current_solution = np.random.permutation(n)
         best_solution = copy.deepcopy(current_solution)
-        best_cost = self.calculate_total_distance(best_solution)
+        best_cost = self._calculate_total_distance(best_solution)
 
         # Initialize tabu list
         tabu_list = []
 
         for _ in range(self.max_iterations):
             # Generate neighboring solutions (swap two cities)
-            neighbors = self.generate_neighbors(current_solution)
+            neighbors = self._generate_neighbors(current_solution)
 
             # Evaluate neighbors and select the best non-tabu neighbor
             best_neighbor = None
             best_neighbor_cost = float('inf')
             for neighbor in neighbors:
-                neighbor_cost = self.calculate_total_distance(neighbor)
+                neighbor_cost = self._calculate_total_distance(neighbor)
                 if tuple(neighbor) not in tabu_list and neighbor_cost < best_neighbor_cost:
                     best_neighbor = neighbor
                     best_neighbor_cost = neighbor_cost
