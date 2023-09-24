@@ -20,6 +20,9 @@ class GRASP:
         self.best_solution = None
         self.best_cost = float('inf')
 
+    def get_solution(self):
+        return self.best_solution, self.best_cost
+
     def solve(self):
         """
         This method solves the TSP using the GRASP algorithm.
