@@ -43,5 +43,5 @@ class GRASP:
     def _local_search(self, solution):
         pass
 
-    def _two_opt(self, solution):
+    def _two_opt(self, solution, i, j):
         pass
