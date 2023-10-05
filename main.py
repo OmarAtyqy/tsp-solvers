@@ -33,14 +33,14 @@ if __name__ == "__main__":
         # City("Z", 7, 5),
     ]
 
-    # alpha = 3
-    # iterations = 100
+    alpha = 3
+    iterations = 100
 
     # search
-    # grasp = Grasp(alpha, iterations)
-    # best_solution, t_explore, t_exploit = grasp.search(cities)
-    # best_solution.print_solution(best_solution)
-    # best_solution.plot_solution(best_solution)
+    grasp = Grasp(alpha, iterations)
+    best_solution, t_explore, t_exploit = grasp.search(cities)
+    best_solution.print_solution(best_solution)
+    best_solution.plot_solution(best_solution)
 
     # test grasp using different values of alpha
     alphas = [i for i in range(1, 6)]
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     r2 = [x + barWidth for x in r1]
     plt.bar(r1, explore_times, color="blue", width=barWidth, label="Explore time")
     plt.bar(r2, exploit_times, color="red", width=barWidth, label="Exploit time")
-    plt.xticks([r + barWidth for r in range(len(explore_times))], alphas)
+    plt.xticks([r + barWidth for r in range(len(explore_times))], iterations)
     plt.title(f"impact of iteration on GRASP with alpha = {alpha}")
     plt.ylabel("Time")
     plt.xlabel("Iteration")
@@ -113,7 +113,7 @@ if __name__ == "__main__":
 
     # plot the results of the cost
     plt.figure(figsize=(5, 5))
-    plt.plot(alphas, cost_solutions)
+    plt.plot(iterations, cost_solutions)
     plt.title(f"impact of iteration on GRASP with alpha = {alpha}")
     plt.ylabel("Cost")
     plt.xlabel("Iteration")
