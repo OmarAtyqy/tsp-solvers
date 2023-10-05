@@ -1,0 +1,72 @@
+proc GRASP:
+    INPUT : 
+        cities: list of cities to be traveled
+        T_max: limit of iterations number
+        alpha: size of the restricted candidate list
+    BEGIN 
+        best_solution = None
+        best_cost = infinity
+        for i in range(T_max):
+            solution = construct_randomized_greedy_solution(cities, alpha)
+            solution = local_search(solution)
+            if solution.cost < best_cost:
+                best_solution = solution
+                best_cost = solution.cost
+        return best_solution
+    END
+
+proc construct_randomized_greedy_solution:
+    INPUT : 
+        cities: list of cities to be traveled
+        alpha: size of the restricted candidate list
+    BEGIN
+        solution = []
+        while len(solution) < len(cities):
+            candidate_sol = solution.copy
+            for city in cities:
+                if city not in solution:
+                    candidate_sol.append(city)
+                    break
+            candidate_list = generate_ordred_candidates(candidate_sol)
+            RCL = candidate_list[:alpha]
+            random_index = random(0, len(RCL))
+            solution = RCL[random_index]
+        return solution
+    END
+
+proc local_search:
+    INPUT:
+        solution: solution to be improved
+    BEGIN
+        while True:
+            best_solution = solution
+            for i in range(len(solution)):
+                for j in range(i+1, len(solution)):
+                    new_solution = two_opt(solution, i, j)
+                    if new_solution.cost < best_solution.cost:
+                        best_solution = new_solution
+            if best_solution == solution:
+                break
+            solution = best_solution
+        return solution
+    END
+
+
+proc two_opt:
+    INPUT:
+        solution: solution to be improved
+        i: index of the first city to be swapped
+        j: index of the second city to be swapped
+    BEGIN
+        new_solution = solution[:i]
+        new_solution += solution[i:j][::-1]
+        new_solution += solution[j:]
+        return new_solution
+    END
+
+proc sort_by_cost:
+    INPUT:
+        candidate_list: list of cities to be sorted
+    BEGIN
+        return sorted(candidate_list, key=lambda x: x.cost)
+    END
