@@ -62,7 +62,8 @@ class Solution:
             [solution.cities[-1].y, solution.cities[0].y],
             color="blue",
         )
-        plt.show()
+        plt.title(f"Solution with cost {solution.cost}")
+        plt.savefig("{}{}.png".format("solution", solution.cost))
 
 
 # class grasp
@@ -133,6 +134,7 @@ class Grasp:
         solutions = []
         exploration_time = 0
         exploitation_time = 0
+        cost_history = []
         for i in tqdm.tqdm(range(self.iterations)):
             start = time.time()
             solution = self.construct_greedy_randomized_solution(cities)
@@ -143,4 +145,5 @@ class Grasp:
             end = time.time()
             exploitation_time += end - start
             solutions.append(solution)
-        return self.sort_by_cost(solutions)[0], exploration_time, exploitation_time
+            cost_history.append(solution.cost)
+        return self.sort_by_cost(solutions)[0], exploration_time, exploitation_time, cost_history
