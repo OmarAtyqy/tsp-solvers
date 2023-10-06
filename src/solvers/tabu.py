@@ -8,6 +8,8 @@ import numpy as np
 
 from src.distances.distances import euclidean_distance
 
+import time
+
 
 class Tabu:
     def __init__(self, coordinates, max_iterations, tabu_tenure, distance_function=euclidean_distance):
@@ -57,12 +59,17 @@ class Tabu:
 
         # Initialize tabu list
         tabu_list = []
+        explore_time = 0
+        exploit_time = 0
 
         for _ in range(self.max_iterations):
             # Generate neighboring solutions (swap two cities)
+            t = time.time()
             neighbors = self._generate_neighbors(current_solution)
+            explore_time += (time.time() - t)
 
             # Evaluate neighbors and select the best non-tabu neighbor
+            t = time.time()
             best_neighbor = None
             best_neighbor_cost = float('inf')
             for neighbor in neighbors:
@@ -70,6 +77,7 @@ class Tabu:
                 if tuple(neighbor) not in tabu_list and neighbor_cost < best_neighbor_cost:
                     best_neighbor = neighbor
                     best_neighbor_cost = neighbor_cost
+            exploit_time += (time.time() - t)
 
             # Update current solution
             current_solution = best_neighbor
@@ -90,6 +98,8 @@ class Tabu:
         # Update the best solution and cost
         self.best_solution = best_solution_order
         self.best_cost = best_cost
+
+        return explore_time, exploit_time
 
     def get_solution(self):
         return self.best_solution, self.best_cost
